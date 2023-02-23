@@ -22,7 +22,7 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse duplicateException(final duplicateException e) {
+    public ErrorResponse handleDuplicateException(final duplicateException e) {
         return new ErrorResponse("",
                 e.getMessage()
         );
@@ -30,7 +30,7 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse notFountException(final notFountException e) {
+    public ErrorResponse handleNotFountException(final notFountException e) {
         return new ErrorResponse("",
                 e.getMessage()
         );
@@ -38,7 +38,7 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse alreadyExistException(final AlreadyExistException e) {
+    public ErrorResponse handleAlreadyExistException(final AlreadyExistException e) {
         return new ErrorResponse("",
                 e.getMessage()
         );
