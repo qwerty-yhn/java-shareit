@@ -5,8 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.dao.UserRepository;
-import ru.practicum.shareit.exeption.duplicateException;
-import ru.practicum.shareit.exeption.notFountException;
+import ru.practicum.shareit.exeption.DuplicateException;
+import ru.practicum.shareit.exeption.NotFountException;
 import ru.practicum.shareit.exeption.ParameterNotSetException;
 import ru.practicum.shareit.exeption.AlreadyExistException;
 
@@ -69,7 +69,7 @@ class UserServiceImpl implements UserService {
 
         for (int i = 0; i < repository.getUsers().size(); i++) {
             if (repository.getUsers().get(i).getEmail().equals(user.getEmail())) {
-                throw new duplicateException("duplicate email");
+                throw new DuplicateException("duplicate email");
             }
         }
     }
@@ -77,7 +77,7 @@ class UserServiceImpl implements UserService {
     private void checkExist(User user) {
 
         if (repository.existence(user.getId())) {
-            throw new notFountException("object not exist");
+            throw new NotFountException("object not exist");
         }
         for (Integer i : repository.getUsersMap().keySet()) {
             if (repository.getUsersMap().get(i).getEmail().equals(user.getEmail()) && user.getId() != i) {

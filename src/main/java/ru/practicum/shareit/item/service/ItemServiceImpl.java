@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import ru.practicum.shareit.item.dao.ItemRepository;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.dao.UserRepository;
-import ru.practicum.shareit.exeption.notFountException;
+import ru.practicum.shareit.exeption.NotFountException;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public Item createItem(int idOwner, Item item) {
         if (userRepository.existence(idOwner)) {
-            throw new notFountException("object not exist");
+            throw new NotFountException("object not exist");
         }
         item.setOwner(userRepository.getUsersMap().get(idOwner));
         return itemRepository.createItem(item);
@@ -29,11 +29,11 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public Item updateItem(int idOwner, int idItem, Item item) {
         if (userRepository.existence(idOwner)) {
-            throw new notFountException("object not exist");
+            throw new NotFountException("object not exist");
         }
         Item itemPrev = itemRepository.getItem(idItem);
         if (itemPrev.getOwner().getId() != idOwner) {
-            throw new notFountException(" not valid Owner of object");
+            throw new NotFountException(" not valid Owner of object");
         }
         if (item.getName() == null) {
             item.setName(itemPrev.getName());
