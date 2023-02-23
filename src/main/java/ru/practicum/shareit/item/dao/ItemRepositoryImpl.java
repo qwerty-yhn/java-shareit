@@ -58,13 +58,13 @@ public class ItemRepositoryImpl implements ItemRepository {
         final List<Item> itemsToList = new ArrayList<>();
         for (Integer i : items.keySet()) {
             if (items.get(i).getAvailable()) {
-                if (items.get(i).
-                        getName().
-                        toLowerCase().
-                        contains(text.toLowerCase()) || items.get(i).
-                        getDescription().
-                        toLowerCase().
-                        contains(text.toLowerCase())) {
+                if (items.get(i)
+                        .getName()
+                        .toLowerCase()
+                        .contains(text.toLowerCase()) || items
+                        .get(i).getDescription()
+                        .toLowerCase()
+                        .contains(text.toLowerCase())) {
                     itemsToList.add(items.get(i));
                 }
             }

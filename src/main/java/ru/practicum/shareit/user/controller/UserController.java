@@ -20,25 +20,29 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+
     @PostMapping
     public UserDto createUser(@Validated(Create.class) @RequestBody UserDto userDto) {
         log.info("method = 'POST' endpoint = '/users'");
         User user = UserMapper.toUser(userDto);
         return UserMapper.toUserDto(userService.createUser(user));
     }
+
     @PatchMapping("/{id}")
-    public UserDto updateUser(@PathVariable int id, @Validated(Update.class)  @RequestBody UserDto userDto) {
+    public UserDto updateUser(@PathVariable int id, @Validated(Update.class) @RequestBody UserDto userDto) {
         log.info("method = 'PATCH' endpoint = '/users/{}'", id);
         User user = UserMapper.toUser(userDto);
         return UserMapper.toUserDto(userService.updateUser(id, user));
     }
+
     @GetMapping("/{id}")
-    public UserDto getUser(@PathVariable int id){
+    public UserDto getUser(@PathVariable int id) {
         log.info("method = 'GET' endpoint = '/users/{}'", id);
         return UserMapper.toUserDto(userService.getUser(id));
     }
+
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable int id){
+    public void deleteUser(@PathVariable int id) {
         log.info("method = 'DELETE' endpoint = '/users/{}'", id);
         userService.deleteUser(id);
     }
