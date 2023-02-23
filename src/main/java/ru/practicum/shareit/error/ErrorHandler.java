@@ -4,8 +4,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.practicum.shareit.exeption.DuplicateException;
-import ru.practicum.shareit.exeption.NotFoundException;
+import ru.practicum.shareit.exeption.UserAlreadyExistsByEmailException;
+import ru.practicum.shareit.exeption.UserNotFoundException;
 import ru.practicum.shareit.exeption.ParameterNotSetException;
 import ru.practicum.shareit.exeption.AlreadyExistException;
 
@@ -22,7 +22,7 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse DuplicateException(final DuplicateException e) {
+    public ErrorResponse DuplicateException(final UserAlreadyExistsByEmailException e) {
         return new ErrorResponse("",
                 e.getMessage()
         );
@@ -30,7 +30,7 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse NotFountException(final NotFoundException e) {
+    public ErrorResponse NotFountException(final UserNotFoundException e) {
         return new ErrorResponse("",
                 e.getMessage()
         );
