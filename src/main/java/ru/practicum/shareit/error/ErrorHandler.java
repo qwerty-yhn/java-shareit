@@ -14,7 +14,9 @@ public class ErrorHandler {
         return new ErrorResponse("",
                 e.getMessage()
         );
-    }    @ExceptionHandler
+    }
+    
+    @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleNotValidOwnerOfObject(final NotValidOwnerOfObject e) {
         return new ErrorResponse("",
