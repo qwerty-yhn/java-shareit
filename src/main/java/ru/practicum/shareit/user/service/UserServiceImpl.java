@@ -64,12 +64,12 @@ class UserServiceImpl implements UserService {
     private void checkAssert(User user) {
 
         if (user.getName() == null || user.getEmail() == null) {
-            throw new ParameterNotSetException("Object's parameter not set");
+            throw new ParameterNotSetException("Object's(id = " + user.getId() + ") parameter not set");
         }
 
         for (int i = 0; i < repository.getUsers().size(); i++) {
             if (repository.getUsers().get(i).getEmail().equals(user.getEmail())) {
-                throw new DuplicateException("duplicate email");
+                throw new DuplicateException("duplicate(id = " + user.getId() + ") email");
             }
         }
     }
@@ -77,11 +77,11 @@ class UserServiceImpl implements UserService {
     private void checkExist(User user) {
 
         if (repository.existence(user.getId())) {
-            throw new NotFountException("object not exist");
+            throw new NotFountException("object wish id = " + user.getId() + " not exist");
         }
         for (Integer i : repository.getUsersMap().keySet()) {
             if (repository.getUsersMap().get(i).getEmail().equals(user.getEmail()) && user.getId() != i) {
-                throw new AlreadyExistException("email already exist");
+                throw new AlreadyExistException("email(id = " + user.getId() + ") already exist");
             }
         }
     }

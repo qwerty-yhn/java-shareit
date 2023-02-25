@@ -23,33 +23,33 @@ public class UserController {
 
     @PostMapping
     public UserDto createUser(@Validated(Create.class) @RequestBody UserDto userDto) {
-        log.info("method = 'POST' endpoint = '/users'");
+        log.info("method = 'POST' endpoint = '/users' function = 'create user'");
         User user = UserMapper.toUser(userDto);
         return UserMapper.toUserDto(userService.createUser(user));
     }
 
     @PatchMapping("/{id}")
     public UserDto updateUser(@PathVariable int id, @Validated(Update.class) @RequestBody UserDto userDto) {
-        log.info("method = 'PATCH' endpoint = '/users/{}'", id);
+        log.info("method = 'PATCH' endpoint = '/users/{} function = 'update user''", id);
         User user = UserMapper.toUser(userDto);
         return UserMapper.toUserDto(userService.updateUser(id, user));
     }
 
     @GetMapping("/{id}")
     public UserDto getUser(@PathVariable int id) {
-        log.info("method = 'GET' endpoint = '/users/{}'", id);
+        log.info("method = 'GET' endpoint = '/users/{}' function = 'get user by identify'", id);
         return UserMapper.toUserDto(userService.getUser(id));
     }
 
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable int id) {
-        log.info("method = 'DELETE' endpoint = '/users/{}'", id);
+        log.info("method = 'DELETE' endpoint = '/users/{}' function = 'delete user'", id);
         userService.deleteUser(id);
     }
 
     @GetMapping
     public List<UserDto> getAllUsers() {
-        log.info("method = 'GET' endpoint = '/users'");
+        log.info("method = 'GET' endpoint = '/users' function = 'get all users'");
         return UserMapper.toUserDtoList(userService.getAllUsers());
     }
 

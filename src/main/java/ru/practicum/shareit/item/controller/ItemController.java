@@ -24,7 +24,7 @@ public class ItemController {
 
     @PostMapping
     public ItemDto createItem(@RequestHeader(USER_ID_IN_HEADER) int idOwner, @Valid @RequestBody ItemDto itemDto) {
-        log.info("method = 'POST' endpoint = '/users'");
+        log.info("method = 'POST' endpoint = '/users' function = 'create item'");
         Item item = ItemMapper.toItem(itemDto);
         return ItemMapper.toItemDto(itemService.createItem(idOwner, item));
     }
@@ -33,20 +33,20 @@ public class ItemController {
     public ItemDto updateItem(
             @RequestHeader(USER_ID_IN_HEADER) int idOwner, @PathVariable int idItem, @RequestBody ItemDto itemDto
     ) {
-        log.info("method = 'PATCH' endpoint = '/users/{}'", idItem);
+        log.info("method = 'PATCH' endpoint = '/users/{} function = 'update item''", idItem);
         Item item = ItemMapper.toItem(itemDto);
         return ItemMapper.toItemDto(itemService.updateItem(idOwner, idItem, item));
     }
 
     @GetMapping("/{idItem}")
     public ItemDto getItemById(@RequestHeader(USER_ID_IN_HEADER) int idOwner, @PathVariable int idItem) {
-        log.info("method = 'GET' endpoint = '/users/{}'", idItem);
+        log.info("method = 'GET' endpoint = '/users/{}' function = 'get item by identify'", idItem);
         return ItemMapper.toItemDto(itemService.getItemById(idOwner, idItem));
     }
 
     @GetMapping
     public List<ItemDto> getAllItems(@RequestHeader(USER_ID_IN_HEADER) int idOwner) {
-        log.info("method = 'GET' endpoint = '/users'");
+        log.info("method = 'GET' endpoint = '/users' function = 'get all items'");
         return ItemMapper.toItemDtoList(itemService.getAllItems(idOwner));
     }
 
@@ -55,7 +55,7 @@ public class ItemController {
         if (text.isBlank()) {
             return new ArrayList<>();
         }
-        log.info("method = 'GET' endpoint = '/users/search{}'", text);
+        log.info("method = 'GET' endpoint = '/users/search{} function = 'find item by params''", text);
         return ItemMapper.toItemDtoList(itemService.getItemsByText(text));
     }
 }
