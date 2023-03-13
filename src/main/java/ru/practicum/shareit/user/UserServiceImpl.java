@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.error.NotFoundException;
+import ru.practicum.shareit.user.exeption.AlreadyExistException;
 
 import java.util.List;
 
@@ -15,6 +16,13 @@ class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public User createUser(User user) {
+        List<User> usersTemp = getAllUsers();
+
+        for (User i : usersTemp) {
+            if (i.getEmail().equals(user.getEmail()) && user.getId() != i.getId()) {
+                //throw new AlreadyExistException("email(id = " + user.getId() + ") already exist");
+            }
+        }
         return repository.save(user);
     }
 
@@ -65,4 +73,15 @@ class UserServiceImpl implements UserService {
         }
         return user;
     }
+//    private void checkExist(User user) {
+//
+//        if (repository.existence(user.getId())) {
+//            throw new NotFountException("object wish id = " + user.getId() + " not exist");
+//        }
+//        for (Integer i : repository.getUsersMap().keySet()) {
+//            if (repository.getUsersMap().get(i).getEmail().equals(user.getEmail()) && user.getId() != i) {
+//                throw new AlreadyExistException("email(id = " + user.getId() + ") already exist");
+//            }
+//        }
+//    }
 }

@@ -61,9 +61,13 @@ public class ItemServiceImpl implements ItemService {
     public ItemDto getItemById(Long idOwner, Long idItem) {
         Item item = getItem(idItem);
         if (item.getOwner().getId().equals(idOwner)) {
-            return itemSetComment(itemSetBooking(itemMapper.toItemDto(item)));
+            ItemDto temp1 = itemSetBooking(itemMapper.toItemDto(item));
+            ItemDto temp2 = itemSetComment(temp1);
+            return temp2;
         }
-        return itemSetComment(itemMapper.toItemDto(item));
+
+        ItemDto temp = itemSetComment(itemMapper.toItemDto(item));
+        return temp;
     }
 
     public Item getItem(Long idItem) {
@@ -109,7 +113,9 @@ public class ItemServiceImpl implements ItemService {
     @Transactional
     @Override
     public ItemDto itemSetBooking(ItemDto itemDto) {
-        itemDto.setLastBooking(getLastNextItemBookings(itemDto).get(0));
+
+        BookingDtoIn tempbooking = getLastNextItemBookings(itemDto).get(0);
+        itemDto.setLastBooking(tempbooking);
         itemDto.setNextBooking(getLastNextItemBookings(itemDto).get(1));
         return itemDto;
     }
@@ -117,7 +123,8 @@ public class ItemServiceImpl implements ItemService {
     @Transactional
     @Override
     public ItemDto itemSetComment(ItemDto itemDto) {
-        itemDto.setComments(getItemComment(itemDto));
+        List<CommentDto> tempComment = getItemComment(itemDto);
+        itemDto.setComments(tempComment);
         return itemDto;
     }
 
@@ -126,13 +133,15 @@ public class ItemServiceImpl implements ItemService {
         LocalDateTime now = LocalDateTime.now();
 
         List<Booking> itemBookings = bookingRepository.findAllByItem_Id(itemDto.getId());
-        lastNextBokingsTemp.add(0, bookingShortMapper.toDTO(itemBookings.stream()
-                .filter(x -> !(x.getStatus().equals(BookingStatus.REJECTED)))
-                .filter(x -> x.getEnd().isBefore(now))
-                .sorted(Comparator.comparing(Booking::getStart)).findFirst().orElse(null)));
+
+                lastNextBokingsTemp.add(0, bookingShortMapper.toDTO(itemBookings.stream()
+                .filter(obj -> !(obj.getStatus().equals(BookingStatus.REJECTED)))
+                .filter(obj -> obj.getStart().isBefore(now))
+                .sorted((obj1, obj2)-> obj2.getStart().compareTo(obj1.getStart())).findFirst().orElse(null)));
+
         lastNextBokingsTemp.add(1, bookingShortMapper.toDTO(itemBookings.stream()
-                .filter(x -> !(x.getStatus().equals(BookingStatus.REJECTED)))
-                .filter(x -> x.getStart().isAfter(now))
+                .filter(obj -> !(obj.getStatus().equals(BookingStatus.REJECTED)))
+                .filter(obj -> obj.getStart().isAfter(now))
                 .sorted(Comparator.comparing(Booking::getStart)).findFirst().orElse(null)));
         return lastNextBokingsTemp;
     }

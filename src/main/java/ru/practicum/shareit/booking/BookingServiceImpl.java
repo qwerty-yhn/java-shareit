@@ -61,20 +61,23 @@ class BookingServiceImpl implements BookingService {
 
     @Transactional
     @Override
-    public BookingDto create(Long userId, BookingDtoOut bookingDtoRequest) {
-        if (bookingDtoRequest.getEnd().isBefore(bookingDtoRequest.getStart())) {
+    public BookingDto create(Long userId, BookingDtoOut bookingDtoOut) {
+        if (bookingDtoOut.getEnd().isBefore(bookingDtoOut.getStart())) {
+            throw new BadRequestException("");
+        }
+        if (bookingDtoOut.getEnd().equals(bookingDtoOut.getStart())) {
             throw new BadRequestException("");
         }
 
         User booker = userService.getUser(userId);
-        Item item = itemService.getItem(bookingDtoRequest.getItemId());
+        Item item = itemService.getItem(bookingDtoOut.getItemId());
 
         if (booker.getId().equals(item.getOwner().getId())) {
             throw new NotFoundException("");
         }
 
         if (item.getAvailable()) {
-            Booking booking = newBooking(bookingDtoRequest, booker, item);
+            Booking booking = newBooking(bookingDtoOut, booker, item);
             return bookingMapper.toDTO(bookingRepository.save(booking));
         } else {
             throw new BadRequestException("");
@@ -138,7 +141,8 @@ class BookingServiceImpl implements BookingService {
                         .filter(x -> x.getStart().isBefore(now) && x.getEnd().isAfter(now))
                         .map(bookingMapper::toDTO)
                         .collect(Collectors.toList());
-                result.sort(Comparator.comparing(BookingDto::getId).reversed());
+                result.sort(Comparator.comparing(BookingDto::getId));
+
                 return result;
 
             case "PAST":
