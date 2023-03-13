@@ -54,7 +54,7 @@ class UserServiceImpl implements UserService {
     private User updateParameters(User user) {
 
         for (int i = 0; i < repository.findAll().size(); i++) {
-            if (repository.findAll().get(i).getId() == user.getId()) {
+            if (repository.findAll().get(i).getId().equals(user.getId())) {
                 if (user.getName() == null) {
                     user.setName(repository.findAll().get(i).getName());
                 }
