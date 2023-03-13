@@ -134,10 +134,10 @@ public class ItemServiceImpl implements ItemService {
 
         List<Booking> itemBookings = bookingRepository.findAllByItem_Id(itemDto.getId());
 
-                lastNextBokingsTemp.add(0, bookingShortMapper.toDTO(itemBookings.stream()
+        lastNextBokingsTemp.add(0, bookingShortMapper.toDTO(itemBookings.stream()
                 .filter(obj -> !(obj.getStatus().equals(BookingStatus.REJECTED)))
                 .filter(obj -> obj.getStart().isBefore(now))
-                .sorted((obj1, obj2)-> obj2.getStart().compareTo(obj1.getStart())).findFirst().orElse(null)));
+                .sorted((obj1, obj2) -> obj2.getStart().compareTo(obj1.getStart())).findFirst().orElse(null)));
 
         lastNextBokingsTemp.add(1, bookingShortMapper.toDTO(itemBookings.stream()
                 .filter(obj -> !(obj.getStatus().equals(BookingStatus.REJECTED)))
