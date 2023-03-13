@@ -39,7 +39,7 @@ public class ItemServiceImpl implements ItemService {
     public Item updateItem(Long idOwner, Long idItem, Item item) {
 
         Item itemPrev = getItem(idItem);
-        if (itemPrev.getOwner().getId() != idOwner) {
+        if (!(itemPrev.getOwner().getId().equals(idOwner))) {
             throw new NotFoundException(" not valid Owner(" + idOwner + ") of object");
         }
         if (item.getName() == null) {
