@@ -11,11 +11,13 @@ import java.util.List;
 @RequiredArgsConstructor
 class UserServiceImpl implements UserService {
     private final UserRepository repository;
+
     @Transactional
     @Override
     public User createUser(User user) {
         return repository.save(user);
     }
+
     @Transactional
     @Override
     public User updateUser(Long id, User user) {
@@ -29,17 +31,20 @@ class UserServiceImpl implements UserService {
 
         return userResult;
     }
+
     @Transactional
     @Override
     public User getUser(Long id) {
         User user = repository.findById(id).orElseThrow(() -> new NotFoundException(""));
         return user;
     }
+
     @Transactional
     @Override
     public void deleteUser(Long id) {
         repository.deleteById(id);
     }
+
     @Transactional
     @Override
     public List<User> getAllUsers() {

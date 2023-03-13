@@ -3,6 +3,7 @@ package ru.practicum.shareit.item;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 @Service
 public interface ItemService {
     Item createItem(Long idOwner, Item item);

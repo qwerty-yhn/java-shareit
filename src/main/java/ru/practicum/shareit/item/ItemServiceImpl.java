@@ -26,12 +26,14 @@ public class ItemServiceImpl implements ItemService {
     private final BookingShortMapper bookingShortMapper;
     private final CommentRepository commentRepository;
     private final CommentMapper commentMapper;
+
     @Transactional
     @Override
     public Item createItem(Long idOwner, Item item) {
         item.setOwner(userService.getUser(idOwner));
         return itemRepository.save(item);
     }
+
     @Transactional
     @Override
     public Item updateItem(Long idOwner, Long idItem, Item item) {
@@ -53,6 +55,7 @@ public class ItemServiceImpl implements ItemService {
         item.setId(idItem);
         return itemRepository.save(item);
     }
+
     @Transactional
     @Override
     public ItemDto getItemById(Long idOwner, Long idItem) {
@@ -66,6 +69,7 @@ public class ItemServiceImpl implements ItemService {
     public Item getItem(Long idItem) {
         return itemRepository.findById(idItem).orElseThrow(() -> new NotFoundException("Not found item = " + idItem));
     }
+
     @Transactional
     @Override
     public List<Item> getAllItems(Long idOwner) {
@@ -79,6 +83,7 @@ public class ItemServiceImpl implements ItemService {
                 .stream()
                 .collect(Collectors.toList());
     }
+
     @Transactional
     @Override
     public CommentDto createComment(Long itemId, Long userId, CommentDto commentDto) {
@@ -100,6 +105,7 @@ public class ItemServiceImpl implements ItemService {
         }
         return commentMapper.toDTO(comment);
     }
+
     @Transactional
     @Override
     public ItemDto itemSetBooking(ItemDto itemDto) {
@@ -107,6 +113,7 @@ public class ItemServiceImpl implements ItemService {
         itemDto.setNextBooking(getLastNextItemBookings(itemDto).get(1));
         return itemDto;
     }
+
     @Transactional
     @Override
     public ItemDto itemSetComment(ItemDto itemDto) {

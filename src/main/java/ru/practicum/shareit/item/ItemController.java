@@ -11,7 +11,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 @RestController
 @RequestMapping("/items")
 @RequiredArgsConstructor
@@ -28,6 +27,7 @@ public class ItemController {
         Item item = ItemMapper.toItem(itemDto);
         return ItemMapper.toItemDto(itemService.createItem(idOwner, item));
     }
+
     @PatchMapping("/{idItem}")
     public ItemDto updateItem(@RequestHeader("X-Sharer-User-Id") Long idOwner,
                               @PathVariable Long idItem,
@@ -64,10 +64,11 @@ public class ItemController {
         log.info("method = 'GET' endpoint = '/users/search{} function = 'find item by params'", text);
         return ItemMapper.toItemDtoList(itemService.getItemsByText(text));
     }
+
     @PostMapping("/{itemId}/comment")
     public CommentDto createComment(@PathVariable Long itemId,
-                             @NotEmpty @RequestHeader("X-Sharer-User-Id") Long userId,
-                             @Valid @RequestBody CommentDto commentDto) {
+                                    @NotEmpty @RequestHeader("X-Sharer-User-Id") Long userId,
+                                    @Valid @RequestBody CommentDto commentDto) {
         log.info("method = 'Post' endpoint = '/{}/comment function = 'create comment''", itemId);
         return itemService.createComment(itemId, userId, commentDto);
     }

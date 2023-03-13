@@ -27,6 +27,7 @@ class BookingServiceImpl implements BookingService {
     private final UserService userService;
     private final ItemRepository itemRepository;
     private final ItemService itemService;
+
     @Transactional
     @Override
     public BookingDto getBookingById(Long bookingId, Long userId) {
@@ -37,6 +38,7 @@ class BookingServiceImpl implements BookingService {
             throw new NotFoundException("");
         }
     }
+
     @Transactional
     @Override
     public List<BookingDto> getAllBookingsByUser(Long userId, String state) {
@@ -44,6 +46,7 @@ class BookingServiceImpl implements BookingService {
         List<Booking> allUserBookings = bookingRepository.findAllByBooker_Id(userId);
         return getUserBookings(state, allUserBookings);
     }
+
     @Transactional
     @Override
     public List<BookingDto> getAllItemsBookingsByOwner(Long userId, String state) {
@@ -55,6 +58,7 @@ class BookingServiceImpl implements BookingService {
         List<Booking> allBookings = bookingRepository.findAllByBooker_IdNotAndItemIn(userId, userItems);
         return getUserBookings(state, allBookings);
     }
+
     @Transactional
     @Override
     public BookingDto create(Long userId, BookingDtoOut bookingDtoRequest) {
@@ -76,6 +80,7 @@ class BookingServiceImpl implements BookingService {
             throw new BadRequestException("");
         }
     }
+
     @Transactional
     @Override
     public BookingDto approve(Long bookingId, Long userId, Boolean approved) {
@@ -99,6 +104,7 @@ class BookingServiceImpl implements BookingService {
         }
         return bookingMapper.toDTO(booking);
     }
+
     @Transactional
     @Override
     public Booking getBooking(Long bookingId) {
