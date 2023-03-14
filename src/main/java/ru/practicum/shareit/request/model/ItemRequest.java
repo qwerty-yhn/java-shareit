@@ -5,7 +5,6 @@ import ru.practicum.shareit.user.User;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Getter
@@ -15,7 +14,7 @@ import java.time.LocalDateTime;
 @Builder
 @Entity
 @Table(name = "requests")
-public class ItemRequest{
+public class ItemRequest {
 
     @Id
     private Long id;
