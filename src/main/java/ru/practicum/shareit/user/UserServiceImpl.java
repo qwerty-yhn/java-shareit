@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.error.NotFoundException;
+import ru.practicum.shareit.user.exeption.AlreadyExistException;
 
 import java.util.List;
 
@@ -17,17 +18,28 @@ class UserServiceImpl implements UserService {
     public User createUser(User user) {
         List<User> usersTemp = getAllUsers();
 
-        for (User i : usersTemp) {
-            if (i.getEmail().equals(user.getEmail()) && user.getId() != i.getId()) {
-                //throw new AlreadyExistException("email(id = " + user.getId() + ") already exist");
-            }
-        }
-        return repository.save(user);
+//        for (User i : usersTemp) {
+//            if (i.getEmail().equals(user.getEmail()) && user.getId() != i.getId()) {
+//                repository.save(user);
+//                throw new AlreadyExistException("email(id = " + user.getId() + ") already exist");
+//            }
+//        }
+        User temp = repository.save(user);
+        return temp;
     }
 
     @Transactional
     @Override
     public User updateUser(Long id, User user) {
+
+//        List<User> usersTemp = getAllUsers();
+//        for (User i : usersTemp) {
+//            if (i.getEmail().equals(user.getEmail()) && user.getId() != i.getId()) {
+//                throw new AlreadyExistException("email(id = " + user.getId() + ") already exist");
+//            }
+//        }
+
+
         user.setId(id);
         User userTemp = updateParameters(user);
         User userResult = getUser(id);
