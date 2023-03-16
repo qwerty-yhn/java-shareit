@@ -125,6 +125,7 @@ class BookingServiceImpl implements BookingService {
                 .status(BookingStatus.WAITING)
                 .build();
     }
+
     private void checkExist(Long userId) {
         userService.getUser(userId);
     }
