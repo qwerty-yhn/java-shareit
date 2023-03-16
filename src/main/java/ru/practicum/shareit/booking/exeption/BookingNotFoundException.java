@@ -1,6 +1,5 @@
 package ru.practicum.shareit.booking.exeption;
 
-import ru.practicum.shareit.booking.BookingState;
 import ru.practicum.shareit.error.NotFoundException;
 
 public class BookingNotFoundException extends NotFoundException {
