@@ -7,6 +7,9 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.*;
 import ru.practicum.shareit.error.BadRequestException;
 import ru.practicum.shareit.error.NotFoundException;
+import ru.practicum.shareit.item.exeption.ItemNotFoundByOwnerException;
+import ru.practicum.shareit.item.exeption.ItemNotFoundException;
+import ru.practicum.shareit.item.exeption.StatusUnsupportedException;
 import ru.practicum.shareit.user.UserService;
 
 import java.time.LocalDateTime;
@@ -40,7 +43,7 @@ public class ItemServiceImpl implements ItemService {
 
         Item itemPrev = getItem(idItem);
         if (!(itemPrev.getOwner().getId().equals(idOwner))) {
-            throw new NotFoundException(" not valid Owner(" + idOwner + ") of object");
+            throw new ItemNotFoundByOwnerException(idOwner);
         }
         if (item.getName() == null) {
             item.setName(itemPrev.getName());
@@ -71,13 +74,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     public Item getItem(Long idItem) {
-        return itemRepository.findById(idItem).orElseThrow(() -> new NotFoundException("Not found item = " + idItem));
-    }
-
-    @Transactional
-    @Override
-    public List<Item> getAllItems(Long idOwner) {
-        return null;
+        return itemRepository.findById(idItem).orElseThrow(() -> new ItemNotFoundException(idItem));
     }
 
     @Transactional
@@ -105,7 +102,7 @@ public class ItemServiceImpl implements ItemService {
                     .build();
             commentRepository.save(comment);
         } else {
-            throw new BadRequestException("");
+            throw new StatusUnsupportedException(userId, itemId);
         }
         return commentMapper.toDTO(comment);
     }

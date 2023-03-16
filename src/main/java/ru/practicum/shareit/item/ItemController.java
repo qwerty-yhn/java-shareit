@@ -11,6 +11,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static ru.practicum.shareit.constant.Constants.USER_ID;
+
 @RestController
 @RequestMapping("/items")
 @RequiredArgsConstructor
@@ -21,7 +23,7 @@ public class ItemController {
     private final ItemService itemService;
 
     @PostMapping
-    public ItemDto createItem(@RequestHeader("X-Sharer-User-Id") Long idOwner,
+    public ItemDto createItem(@RequestHeader(USER_ID) Long idOwner,
                               @Valid @RequestBody ItemDto itemDto) {
         log.info("method = 'POST' endpoint = '/users' function = 'create item'");
         Item item = ItemMapper.toItem(itemDto);
@@ -29,7 +31,7 @@ public class ItemController {
     }
 
     @PatchMapping("/{idItem}")
-    public ItemDto updateItem(@RequestHeader("X-Sharer-User-Id") Long idOwner,
+    public ItemDto updateItem(@RequestHeader(USER_ID) Long idOwner,
                               @PathVariable Long idItem,
                               @RequestBody ItemDto itemDto
     ) {
@@ -39,14 +41,14 @@ public class ItemController {
     }
 
     @GetMapping("/{idItem}")
-    public ItemDto getItemById(@RequestHeader("X-Sharer-User-Id") Long idOwner,
+    public ItemDto getItemById(@RequestHeader(USER_ID) Long idOwner,
                                @PathVariable Long idItem) {
         log.info("method = 'GET' endpoint = '/users/{}' function = 'get item by identify'", idItem);
         return itemService.getItemById(idOwner, idItem);
     }
 
     @GetMapping
-    public List<ItemDto> getAllItems(@RequestHeader("X-Sharer-User-Id") Long idOwner) {
+    public List<ItemDto> getAllItems(@RequestHeader(USER_ID) Long idOwner) {
         log.info("method = 'GET' endpoint = '/users' function = 'get all items'");
         return itemRepository.findByOwnerId(idOwner).stream()
                 .map(ItemMapper::toItemDto)
@@ -67,7 +69,7 @@ public class ItemController {
 
     @PostMapping("/{itemId}/comment")
     public CommentDto createComment(@PathVariable Long itemId,
-                                    @NotEmpty @RequestHeader("X-Sharer-User-Id") Long userId,
+                                    @NotEmpty @RequestHeader(USER_ID) Long userId,
                                     @Valid @RequestBody CommentDto commentDto) {
         log.info("method = 'Post' endpoint = '/{}/comment function = 'create comment''", itemId);
         return itemService.createComment(itemId, userId, commentDto);

@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
 public interface ItemService {
     Item createItem(Long idOwner, Item item);
 
@@ -13,8 +12,6 @@ public interface ItemService {
     ItemDto getItemById(Long idOwner, Long idItem);
 
     Item getItem(Long idItem);
-
-    List<Item> getAllItems(Long idOwner);
 
     List<Item> getItemsByText(String text);
 
