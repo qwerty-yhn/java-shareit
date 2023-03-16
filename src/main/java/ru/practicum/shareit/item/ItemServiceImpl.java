@@ -5,8 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.*;
-import ru.practicum.shareit.error.BadRequestException;
-import ru.practicum.shareit.error.NotFoundException;
 import ru.practicum.shareit.item.exeption.ItemNotFoundByOwnerException;
 import ru.practicum.shareit.item.exeption.ItemNotFoundException;
 import ru.practicum.shareit.item.exeption.StatusUnsupportedException;
