@@ -1,11 +1,11 @@
 package ru.practicum.shareit.request.model;
 
 import lombok.*;
+import ru.practicum.shareit.request.dto.ItemRequestShortDto;
 import ru.practicum.shareit.user.User;
-
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -17,16 +17,16 @@ import java.time.LocalDateTime;
 public class ItemRequest {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotEmpty
     private String description;
 
-    @NotEmpty
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "requester_id")
-    private User requester;
+    @JoinColumn(name = "requestor_id")
+    private User requestor;
 
-    @NotEmpty
     private LocalDateTime created;
+    @Transient
+    private List<ItemRequestShortDto> items;
 }
