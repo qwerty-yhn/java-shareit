@@ -7,7 +7,4 @@ public class DateUtils {
         return LocalDateTime.now();
     }
 
-    public static LocalDateTime nowPlusDays(Long days) {
-        return LocalDateTime.now().plusDays(days);
-    }
 }
