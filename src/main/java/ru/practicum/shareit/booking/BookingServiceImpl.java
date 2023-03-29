@@ -9,6 +9,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.exeption.*;
+import ru.practicum.shareit.data.DateUtils;
 import ru.practicum.shareit.item.Item;
 import ru.practicum.shareit.item.ItemRepository;
 import ru.practicum.shareit.item.ItemService;
@@ -60,7 +61,7 @@ class BookingServiceImpl implements BookingService {
         checkExist(userId);
         List<Item> userItems = itemRepository.findByOwnerId(userId);
         if (userItems.isEmpty()) {
-            throw new BookingOfItemNotFoundException();
+            throw new BookingOfItemNotFoundException(userId);
         }
         if (size != null || from != null) {
             Sort sortByCreated = Sort.by(Sort.Direction.DESC, "start");
@@ -147,7 +148,7 @@ class BookingServiceImpl implements BookingService {
     }
 
     private List<BookingDto> getUserBookings(BookingState state, List<Booking> allBookings) {
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = DateUtils.now();
         switch (state) {
             case ALL:
                 List<BookingDto> result = allBookings.stream()
