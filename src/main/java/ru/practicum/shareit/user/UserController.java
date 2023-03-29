@@ -21,15 +21,13 @@ public class UserController {
     @PostMapping
     public UserDto createUser(@Validated(Create.class) @RequestBody UserDto userDto) {
         log.info("method = 'POST' endpoint = '/users' function = 'create user'");
-        User user = UserMapper.toUser(userDto);
-        return UserMapper.toUserDto(userService.createUser(user));
+        return UserMapper.toUserDto(userService.createUser(userDto));
     }
 
     @PatchMapping("/{id}")
     public UserDto updateUser(@PathVariable Long id, @Validated(Update.class) @RequestBody UserDto userDto) {
         log.info("method = 'PATCH' endpoint = '/users/{} function = 'update user''", id);
-        User user = UserMapper.toUser(userDto);
-        return UserMapper.toUserDto(userService.updateUser(id, user));
+        return UserMapper.toUserDto(userService.updateUser(id, userDto));
     }
 
     @GetMapping("/{id}")

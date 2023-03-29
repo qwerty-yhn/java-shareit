@@ -4,7 +4,7 @@ import ru.practicum.shareit.error.NotFoundException;
 
 public class BookingOfItemNotFoundException extends NotFoundException {
 
-    public BookingOfItemNotFoundException() {
-        super(String.format("item not found"));
+    public BookingOfItemNotFoundException(Long id) {
+        super(String.format("item not found id = %s", id));
     }
 }

@@ -5,31 +5,32 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.user.exeption.UserNotFoundException;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
-class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService {
     private final UserRepository repository;
 
     @Transactional
     @Override
-    public User createUser(User user) {
+    public User createUser(UserDto userDto) {
+        User user = UserMapper.toUser(userDto);
         return repository.save(user);
     }
 
     @Transactional
     @Override
-    public User updateUser(Long id, User user) {
+    public User updateUser(Long id, UserDto userDto) {
 
-        user.setId(id);
-        User userTemp = updateParameters(user);
-        User userResult = getUser(id);
+        User userFromMap = getUser(id);
+        User userFromDto = UserMapper.toUser(userDto);
 
-        userResult.setId(userTemp.getId());
-        userResult.setName(userTemp.getName());
-        userResult.setEmail(userTemp.getEmail());
+        userFromMap.setName(Objects.requireNonNullElse(userFromDto.getName(), userFromMap.getName()));
+        userFromMap.setEmail(Objects.requireNonNullElse(userFromDto.getEmail(), userFromMap.getEmail()));
 
-        return userResult;
+        return repository.save(userFromMap);
+
     }
 
     @Transactional
@@ -50,18 +51,4 @@ class UserServiceImpl implements UserService {
         return repository.findAll();
     }
 
-    private User updateParameters(User user) {
-
-        for (int i = 0; i < repository.findAll().size(); i++) {
-            if (repository.findAll().get(i).getId().equals(user.getId())) {
-                if (user.getName() == null) {
-                    user.setName(repository.findAll().get(i).getName());
-                }
-                if (user.getEmail() == null) {
-                    user.setEmail(repository.findAll().get(i).getEmail());
-                }
-            }
-        }
-        return user;
-    }
 }
