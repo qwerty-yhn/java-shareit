@@ -29,4 +29,5 @@ public class Item {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "request_id")
     private ItemRequest itemRequest;
+
 }

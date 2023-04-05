@@ -2,9 +2,14 @@ package ru.practicum.shareit.booking;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.exeption.*;
+import ru.practicum.shareit.data.DateUtils;
 import ru.practicum.shareit.item.Item;
 import ru.practicum.shareit.item.ItemRepository;
 import ru.practicum.shareit.item.ItemService;
@@ -12,6 +17,7 @@ import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserService;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -39,20 +45,33 @@ class BookingServiceImpl implements BookingService {
 
     @Transactional
     @Override
-    public List<BookingDto> getAllBookingsByUser(Long userId, BookingState state) {
+    public List<BookingDto> getAllBookingsByUser(Long userId, BookingState state, Integer from, Integer size) {
         checkExist(userId);
-        List<Booking> allUserBookings = bookingRepository.findAllByBooker_Id(userId);
-        return getUserBookings(state, allUserBookings);
+        Sort sortByCreated = Sort.by(Sort.Direction.DESC, "start");
+        Pageable page = PageRequest.of(from / size, size, sortByCreated);
+        Page<Booking> bookingPage = bookingRepository.findByBookerId(userId, page);
+        List<Booking> bookings = new ArrayList<>();
+        bookingPage.getContent().forEach(bookings::add);
+        return getUserBookings(state, bookings);
     }
 
-    @Transactional
+
     @Override
-    public List<BookingDto> getAllItemsBookingsByOwner(Long userId, BookingState state) {
+    public List<BookingDto> getAllItemsBookingsByOwner(Long userId, BookingState state, Integer from, Integer size) {
         checkExist(userId);
         List<Item> userItems = itemRepository.findByOwnerId(userId);
         if (userItems.isEmpty()) {
-            throw new BookingOfItemNotFoundException();
+            throw new BookingOfItemNotFoundException(userId);
         }
+        if (size != null || from != null) {
+            Sort sortByCreated = Sort.by(Sort.Direction.DESC, "start");
+            Pageable page = PageRequest.of(from / size, size, sortByCreated);
+            Page<Booking> bookingPage = bookingRepository.findByItem_Id(userId, page);
+            List<Booking> bookings = new ArrayList<>();
+            bookingPage.getContent().forEach(bookings::add);
+            return getUserBookings(state, bookings);
+        }
+
         List<Booking> allBookings = bookingRepository.findAllByBooker_IdNotAndItemIn(userId, userItems);
         return getUserBookings(state, allBookings);
     }
@@ -129,7 +148,7 @@ class BookingServiceImpl implements BookingService {
     }
 
     private List<BookingDto> getUserBookings(BookingState state, List<Booking> allBookings) {
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = DateUtils.now();
         switch (state) {
             case ALL:
                 List<BookingDto> result = allBookings.stream()

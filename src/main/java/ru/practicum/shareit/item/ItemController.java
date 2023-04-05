@@ -27,7 +27,7 @@ public class ItemController {
                               @Valid @RequestBody ItemDto itemDto) {
         log.info("method = 'POST' endpoint = '/users' function = 'create item'");
         Item item = ItemMapper.toItem(itemDto);
-        return ItemMapper.toItemDto(itemService.createItem(idOwner, item));
+        return ItemMapper.toItemDto(itemService.createItem(idOwner, item, itemDto.getRequestId()));
     }
 
     @PatchMapping("/{idItem}")

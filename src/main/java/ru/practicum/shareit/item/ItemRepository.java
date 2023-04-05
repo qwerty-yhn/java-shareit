@@ -6,6 +6,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Long> {
@@ -16,4 +17,9 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     List<Item> search(@Param("text") String text);
 
     List<Item> findByOwnerId(Long userId);
+
+    @Query(value = "select i from Item i where Item.owner.id = :userId", nativeQuery = true)
+    Set<Item> findByOwnerIdS(Long userId);
+
+    List<Item> findAllByItemRequestId(Long requester);
 }

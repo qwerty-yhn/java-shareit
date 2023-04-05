@@ -8,6 +8,7 @@ import ru.practicum.shareit.booking.*;
 import ru.practicum.shareit.item.exeption.ItemNotFoundByOwnerException;
 import ru.practicum.shareit.item.exeption.ItemNotFoundException;
 import ru.practicum.shareit.item.exeption.StatusUnsupportedException;
+import ru.practicum.shareit.request.dao.ItemRequestRepository;
 import ru.practicum.shareit.user.UserService;
 
 import java.time.LocalDateTime;
@@ -27,10 +28,17 @@ public class ItemServiceImpl implements ItemService {
     private final BookingShortMapper bookingShortMapper;
     private final CommentRepository commentRepository;
     private final CommentMapper commentMapper;
+    private final ItemRequestRepository itemRequestRepository;
 
     @Transactional
     @Override
-    public Item createItem(Long idOwner, Item item) {
+    public Item createItem(Long idOwner, Item item, Long requesterId) {
+
+        if (requesterId != null) {
+            item.setItemRequest(itemRequestRepository.findById(requesterId).orElseThrow(null));
+        }
+
+
         item.setOwner(userService.getUser(idOwner));
         return itemRepository.save(item);
     }
